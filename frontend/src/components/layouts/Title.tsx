@@ -1,3 +1,4 @@
+import { useAuth0 } from "@auth0/auth0-react";
 import { Flex, Text, Button } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 
@@ -15,6 +16,8 @@ const Title = ({ img, mainTitle, subTitle }: TitleProps) => {
   const handleNavigate = () => {
     navigate("/profile");
   };
+
+  const { loginWithRedirect } = useAuth0();
 
   // TODO: Fix the italics on deeper
   return (
@@ -50,6 +53,7 @@ const Title = ({ img, mainTitle, subTitle }: TitleProps) => {
 
         <Text
           size="16px"
+          fs="italic"
           sx={{
             fontFamily: "Source Serif Pro",
             textAlign: "center",
@@ -60,16 +64,28 @@ const Title = ({ img, mainTitle, subTitle }: TitleProps) => {
         </Text>
       </Flex>
 
-      <Button
-        variant="filled"
-        color="dark"
-        size="lg"
-        radius="xs"
-        sx={{ marginTop: "1rem", fontSize: "14px" }}
-        onClick={handleNavigate}
-      >
-        GET STARTED
-      </Button>
+      <Flex sx={{ flexDirection: "row", gap: "8px" }}>
+        <Button
+          variant="filled"
+          color="dark"
+          size="lg"
+          radius="xs"
+          sx={{ fontSize: "14px" }}
+          // onClick={() => loginWithRedirect({ screen_hint: "signup" })}
+        >
+          GET STARTED
+        </Button>
+        <Button
+          variant="outline"
+          color="dark"
+          size="lg"
+          radius="xs"
+          sx={{ fontSize: "14px" }}
+          onClick={() => loginWithRedirect()}
+        >
+          LOG BACK IN
+        </Button>
+      </Flex>
     </Flex>
   );
 };

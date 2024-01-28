@@ -23,6 +23,7 @@ def handle_auth_error(ex):
 def profile():
     try:
         data = request.get_json()
+        company_id = data.get('company_id')
         company = data.get('company')
         product = data.get('product')
         era = data.get('era')

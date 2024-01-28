@@ -3,6 +3,7 @@ const baseURL = import.meta.env.VITE_BASE_URL;
 
 interface saveProfileProps {
   params: {
+    company_id: string;
     company: string;
     product: string;
     era: string;

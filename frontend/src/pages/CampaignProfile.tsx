@@ -5,8 +5,11 @@ import { Flex, LoadingOverlay } from "@mantine/core";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Dashboard from "src/components/layouts/Dashboard";
+import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 
 const CampaignProfile = () => {
+  const { user } = useAuth0();
+
   const { data, loading, makeRequest } = useRequest({
     request: saveProfile,
     requestByDefault: false,
@@ -64,7 +67,12 @@ const CampaignProfile = () => {
   const handleSubmit = useCallback(
     async (e: any) => {
       e.preventDefault();
-      await makeRequest(formData);
+      if (user) {
+        await makeRequest({
+          company_id: user.user_id,
+          ...formData,
+        });
+      }
     },
     [formData]
   );
@@ -187,4 +195,4 @@ const CampaignProfile = () => {
   );
 };
 
-export default CampaignProfile;
+export default withAuthenticationRequired(CampaignProfile);

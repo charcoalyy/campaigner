@@ -6,14 +6,19 @@ import ActionCard from "@organisms/ActionCard";
 import { useEffect } from "react";
 import Dashboard from "src/components/layouts/Dashboard";
 import Pannable from "src/components/layouts/Pannable";
+import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 
 const Plan = () => {
   const { campaign } = useCampaign();
+  const { user, isAuthenticated } = useAuth0();
 
   const { data, makeRequest } = useRequest({
     request: getCampaign,
     requestByDefault: false,
   });
+
+  console.log(user);
+  console.log(isAuthenticated);
 
   useEffect(() => {
     if (!data && campaign) {
@@ -75,4 +80,4 @@ const Plan = () => {
   );
 };
 
-export default Plan;
+export default withAuthenticationRequired(Plan);
