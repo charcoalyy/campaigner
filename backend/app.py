@@ -1,3 +1,4 @@
+from auth import AuthError, requires_auth
 from models.cohere import find_theme, make_post
 from flask import Flask, jsonify, request
 from flask_cors import CORS
@@ -11,7 +12,14 @@ cors = CORS(app)
 def bad_request(e):
     return jsonify({'API error': str(e)}), 400
 
+@app.errorhandler(AuthError)
+def handle_auth_error(ex):
+    response = jsonify(ex.error)
+    response.status_code = ex.status_code
+    return response
+
 @app.route('/profile', methods=['POST'])
+@requires_auth
 def profile():
     try:
         data = request.get_json()
@@ -39,6 +47,7 @@ def profile():
         return bad_request(e)
 
 @app.route('/campaign', methods=['GET'])
+@requires_auth
 def campaign():
     try:
         campaign_id = request.args.get('campaign_id')
@@ -51,6 +60,7 @@ def campaign():
         return bad_request(e)
 
 @app.route('/save/date', methods=['POST'])
+@requires_auth
 def date():
     try:
         data = request.get_json()
@@ -62,6 +72,7 @@ def date():
         return bad_request(e)
 
 @app.route('/save/caption', methods=['POST'])
+@requires_auth
 def caption():
     try:
         data = request.get_json()
@@ -73,6 +84,7 @@ def caption():
         return bad_request(e)
     
 @app.route('/save/status', methods=['POST'])
+@requires_auth
 def status():
     try:
         data = request.get_json()
@@ -84,6 +96,7 @@ def status():
         return bad_request(e)
     
 @app.route('/instagram', methods=['POST'])
+@requires_auth
 def instagram_post():
     try:
         params = init_creds()
