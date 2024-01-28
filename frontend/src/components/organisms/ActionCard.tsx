@@ -2,12 +2,13 @@ import { saveCaption, saveDate, saveStatus } from "@api/db";
 import { Action } from "@constants/types";
 import useCampaign from "@context/campaignContext";
 import useRequest from "@hooks/useRequest";
-import { Button, Flex, LoadingOverlay, Text } from "@mantine/core";
+import { Button, Flex, LoadingOverlay, Text, Modal } from "@mantine/core";
 import DatePicker from "@molecules/DatePicker";
 import EditableInput from "@molecules/EditableInput";
 import { useState } from "react";
 import ActionModal from "./ActionModal";
 import { publishPost } from "@api/content";
+import { useDisclosure } from "@mantine/hooks";
 
 interface CardProps {
   id: string;
@@ -31,8 +32,10 @@ const ActionCard = ({
   actions,
   mutate,
 }: CardProps) => {
+  const [opened, { open, close }] = useDisclosure(false);
+
   const { campaign } = useCampaign();
-  const [open, setOpen] = useState<string | null>(null);
+  const [openCard, setOpenCard] = useState<string | null>(null);
 
   const { makeRequest: requestSaveDate } = useRequest({
     request: saveDate,
@@ -129,7 +132,7 @@ const ActionCard = ({
             {actions.map((a) => (
               <Button
                 key={a.name}
-                onClick={() => setOpen(a.name)}
+                onClick={() => setOpenCard(a.name)}
                 variant={a.variant}
                 color="dark"
                 sx={{ fontSize: "12px" }}
@@ -141,17 +144,22 @@ const ActionCard = ({
           </Flex>
         </Flex>
       </Flex>
-      {open && (
+      {openCard && (
         <ActionModal
-          open={!!open}
-          type={requestPublishRes ? "success" : open}
-          handleClose={() => setOpen(null)}
+          openCard={!!openCard}
+          type={requestPublishRes ? "success" : openCard}
+          handleClose={() => setOpenCard(null)}
           handleAction={handleAction}
         />
       )}
       {loading && (
         <LoadingOverlay visible={loading} zIndex={1000} overlayBlur={2} />
       )}
+      <Modal opened={opened} onClose={close} title="Authentication">
+        {/* Modal content */}
+      </Modal>
+
+      <Button onClick={open}>Open modal</Button>
     </Flex>
   );
 };

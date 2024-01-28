@@ -2,14 +2,14 @@ import { Flex, Modal, Text, Select, Button } from "@mantine/core";
 import { useMemo, useState } from "react";
 
 interface ActionModal {
-  open: boolean;
+  openCard: boolean;
   type: string;
   handleClose: () => void;
   handleAction: (v: string) => void;
 }
 
 const ActionModal = ({
-  open,
+  openCard,
   type,
   handleClose,
   handleAction,
@@ -62,7 +62,12 @@ const ActionModal = ({
   }, [type, platform, medium, setMedium, setPlatform, handleAction]);
 
   return (
-    <Modal opened={open} onClose={handleClose} withCloseButton={false} centered>
+    <Modal
+      opened={openCard}
+      onClose={handleClose}
+      withCloseButton={false}
+      centered
+    >
       {renderButtons}
     </Modal>
   );
